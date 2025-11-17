@@ -56,7 +56,6 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		log.Println("local image err:", err)
 		return
 	}
-	log.Println(oldImg.ID)
 
 	oldDigest := docker.GetImageDigest(oldImg)
 
@@ -77,6 +76,8 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 	if newDigest == oldDigest {
 		return
 	}
+
+	log.Println("New image detected: ", newImg.RepoTags[0])
 
 	// update now
 	_, err = docker.RestartContainer(ctx, w.Cli, oldDetails)

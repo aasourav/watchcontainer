@@ -26,7 +26,6 @@ func PullLatestImage(ctx context.Context, cli *client.Client, imageStr string) e
 func DeleteOldDigest(ctx context.Context, cli *client.Client, imageID string) error {
 	args := filters.NewArgs()
 	args.Add("dangling", "true")
-	args.Add("label", "io.watcher.enable=true")
 
 	images, err := cli.ImageList(ctx, image.ListOptions{
 		Filters: args,
@@ -43,15 +42,16 @@ func DeleteOldDigest(ctx context.Context, cli *client.Client, imageID string) er
 
 	for _, img := range images {
 		if imageID == img.ID {
+			untaggedImgeId := img.RepoDigests
 			_, err := cli.ImageRemove(ctx, img.ID, image.RemoveOptions{
 				Force:         true,
 				PruneChildren: true,
 			})
 
 			if err != nil {
-				fmt.Printf("Failed to remove image %s: %v\n", img.ID, err)
+				fmt.Printf("Failed to remove image %s: %v\n", untaggedImgeId, err)
 			} else {
-				fmt.Printf("Removed untagged image: %s\n", img.ID)
+				fmt.Printf("Removed untagged image: %s\n", untaggedImgeId)
 			}
 		}
 	}

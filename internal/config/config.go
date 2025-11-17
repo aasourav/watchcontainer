@@ -5,27 +5,21 @@ import (
 	"os"
 	"strconv"
 	"time"
-
-	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
-	WatchInterval   time.Duration `yaml:"watch_interval"`
-	SlackWebhook    string        `yaml:"slack_global_webhook"`
-	SlackChannel    string        `yaml:"slack_global_channel"`
-	IsCleanOldImage bool          `yaml:"clean_old_image"`
+	WatchInterval   time.Duration
+	SlackWebhook    string
+	SlackChannel    string
+	IsCleanOldImage bool
 }
 
-func Load(path string) (*Config, error) {
-	b, err := os.ReadFile(path)
-	if err != nil {
-		return nil, err
-	}
-
+func Load() (*Config, error) {
 	var cfg Config
-	if err := yaml.Unmarshal(b, &cfg); err != nil {
-		return nil, err
-	}
+	cfg.IsCleanOldImage = false
+	cfg.SlackChannel = ""
+	cfg.SlackWebhook = ""
+	cfg.WatchInterval = 10
 
 	if v := os.Getenv("GLOBAL_SLACK_WEBHOOK"); v != "" {
 		cfg.SlackWebhook = v

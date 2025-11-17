@@ -1,4 +1,0 @@
-interval: 10s
-slack_global_webhook: "" # default webhook
-slack_global_channel: ""
-clean_old_image: false

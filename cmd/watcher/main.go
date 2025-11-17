@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load("../../config.yml")
+	cfg, err := config.Load()
 	if err != nil {
 		log.Fatal("config:", err)
 	}
