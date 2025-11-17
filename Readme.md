@@ -28,7 +28,7 @@ services:
     restart: unless-stopped
 
   watcher:
-    image: aasourav/containerwatcher:latest
+    image: aasourav/watchcontainer:latest
     container_name: watcher
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
