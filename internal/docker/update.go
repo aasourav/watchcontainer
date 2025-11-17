@@ -26,6 +26,7 @@ func PullLatestImage(ctx context.Context, cli *client.Client, imageStr string) e
 func DeleteOldDigest(ctx context.Context, cli *client.Client, imageID string) error {
 	args := filters.NewArgs()
 	args.Add("dangling", "true")
+	args.Add("label", "io.watcher.enable=true")
 
 	images, err := cli.ImageList(ctx, image.ListOptions{
 		Filters: args,

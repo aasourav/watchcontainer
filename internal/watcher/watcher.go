@@ -28,7 +28,7 @@ func New(cfg *config.Config, cli *client.Client) *Watcher {
 func (w *Watcher) Run(ctx context.Context) {
 	for {
 		w.scan(ctx)
-		time.Sleep(w.Cfg.Interval)
+		time.Sleep(w.Cfg.WatchInterval)
 	}
 }
 
@@ -85,7 +85,9 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		return
 	}
 
-	docker.DeleteOldDigest(ctx, w.Cli, oldImg.ID)
+	if w.Cfg.IsCleanOldImage {
+		docker.DeleteOldDigest(ctx, w.Cli, oldImg.ID)
+	}
 
 	labels := oldDetails.Config.Labels
 	if labels["io.watcher.slack.enable"] != "true" {
