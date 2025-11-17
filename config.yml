@@ -1,2 +1,2 @@
-interval: 5s
+interval: 35s
 slack_webhook: "" # default webhook

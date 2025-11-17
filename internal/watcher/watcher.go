@@ -40,7 +40,6 @@ func (w *Watcher) scan(ctx context.Context) {
 	}
 
 	for _, c := range containers {
-		log.Println(c.Names)
 		w.process(ctx, c)
 	}
 }
@@ -72,15 +71,13 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		log.Println("new image err:", err)
 		return
 	}
-	return
 
 	newDigest := docker.GetImageDigest(newImg)
 
 	if newDigest == oldDigest {
-		log.Println("SAME IMAGE")
 		return
 	}
-	log.Println("Diffrent IMAGE")
+
 	// update now
 	_, err = docker.RestartContainer(ctx, w.Cli, oldDetails)
 	if err != nil {
@@ -88,7 +85,7 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		return
 	}
 
-	docker.DeleteOldDigest(ctx, w.Cli, oldImg)
+	docker.DeleteOldDigest(ctx, w.Cli, oldImg.ID)
 
 	labels := oldDetails.Config.Labels
 	if labels["io.watcher.slack.enable"] != "true" {
