@@ -32,7 +32,8 @@ services:
     container_name: watcher
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
+    # - /var/lib/docker:/var/lib/docker:ro # optional but useful for metadata
+    evironment:
       GLOBAL_SLACK_WEBHOOK: "slack/xxxxxxx"
       GLOBAL_SLACK_CHANNEL: "#amirath-lube"
       WATCH_INTERVAL: "30"
