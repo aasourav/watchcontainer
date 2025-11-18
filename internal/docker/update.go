@@ -48,9 +48,9 @@ func DeleteOldDigest(ctx context.Context, cli *client.Client, imageID string, im
 			})
 
 			if err != nil {
-				fmt.Printf("failed to remove image %s: %v\n", imageName, err)
+				log.Printf("failed to remove image %s: %v\n", imageName, err)
 			} else {
-				fmt.Printf("removing untagged image: %s\n", imageName)
+				log.Printf("removing untagged image: %s\n", imageName)
 			}
 		}
 	}
