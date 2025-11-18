@@ -57,7 +57,7 @@ jobs:
       - name: Build Docker Image
         run: |
           IMAGE_NAME=aasourav/watchcontainer
-          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ steps.last_version.outputs.new_tag }} .
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ steps.last_version.outputs.new_tag }} . --no-cache
 
       - name: Push Docker Image
         run: |
