@@ -117,6 +117,8 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 
 	if webhook != "" {
 		err := notify.Slack(webhook, msg, channel)
-		log.Println("slack err: ", err.Error())
+		if err != nil {
+			log.Println("slack err: ", err.Error())
+		}
 	}
 }
