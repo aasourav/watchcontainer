@@ -32,6 +32,8 @@ func (w *Watcher) Run(ctx context.Context) {
 	}
 }
 
+var ImageList = make(map[string]bool)
+
 func (w *Watcher) scan(ctx context.Context) {
 	containers, err := docker.ListWatchedContainers(ctx, w.Cli)
 	if err != nil {
@@ -40,6 +42,10 @@ func (w *Watcher) scan(ctx context.Context) {
 	}
 
 	for _, c := range containers {
+		if !ImageList[c.Image] {
+			log.Println("Watching: ", c.Image)
+			ImageList[c.Image] = true
+		}
 		w.process(ctx, c)
 	}
 }
