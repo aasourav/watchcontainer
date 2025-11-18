@@ -109,8 +109,6 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 	}
 
 	channel := labels["io.watcher.slack.channel"]
-	log.Println("webhook: ", webhook)
-	log.Println("channel: ", channel)
 
 	msg := fmt.Sprintf(
 		"*Container Updated*\nName: `%s`\nOld Hash: `%s`\nNew Hash: `%s`",
@@ -118,6 +116,7 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 	)
 
 	if webhook != "" {
-		notify.Slack(webhook, msg, channel)
+		err := notify.Slack(webhook, msg, channel)
+		log.Println("slack err: ", err.Error())
 	}
 }
