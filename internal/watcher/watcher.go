@@ -37,13 +37,13 @@ var ImageList = make(map[string]bool)
 func (w *Watcher) scan(ctx context.Context) {
 	containers, err := docker.ListWatchedContainers(ctx, w.Cli)
 	if err != nil {
-		log.Println("List error:", err)
+		log.Println("list error:", err)
 		return
 	}
 
 	for _, c := range containers {
 		if !ImageList[c.Image] {
-			log.Println("Watching: ", c.Image)
+			log.Println("watching: ", c.Image)
 			ImageList[c.Image] = true
 		}
 		w.process(ctx, c)
@@ -83,7 +83,7 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		return
 	}
 
-	log.Println("New image detected: ", newImg.RepoTags[0])
+	log.Println("new image detected: ", newImg.RepoTags[0])
 
 	// update now
 	_, err = docker.RestartContainer(ctx, w.Cli, oldDetails)
@@ -93,7 +93,7 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 	}
 
 	if w.Cfg.IsCleanOldImage {
-		docker.DeleteOldDigest(ctx, w.Cli, oldImg.ID)
+		docker.DeleteOldDigest(ctx, w.Cli, oldImg.ID, newImg.RepoTags[0])
 	}
 
 	labels := oldDetails.Config.Labels
@@ -101,6 +101,7 @@ func (w *Watcher) process(ctx context.Context, c types.Container) {
 		return
 	}
 
+	log.Println("sending notification to slack for: ", newImg.RepoTags[0])
 	// choose webhook (container override > global)
 	webhook := labels["io.watcher.slack.webhook"]
 	if webhook == "" {
