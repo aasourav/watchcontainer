@@ -62,5 +62,5 @@ jobs:
       - name: Push Docker Image
         run: |
           IMAGE_NAME=aasourav/watchcontainer
-          docker push $IMAGE_NAME:latest
           docker push $IMAGE_NAME:${{ steps.last_version.outputs.new_tag }}
+          docker push $IMAGE_NAME:latest
