@@ -2,6 +2,7 @@ package notify
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"net/http"
 )
@@ -17,7 +18,11 @@ func Slack(webhook string, msg string, channel string) error {
 		Channel: channel,
 	}
 
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	client := &http.Client{Transport: tr}
 	b, _ := json.Marshal(p)
-	_, err := http.Post(webhook, "application/json", bytes.NewBuffer(b))
+	_, err := client.Post(webhook, "application/json", bytes.NewBuffer(b))
 	return err
 }
