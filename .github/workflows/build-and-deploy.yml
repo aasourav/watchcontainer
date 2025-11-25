@@ -36,7 +36,7 @@ jobs:
       - name: Get last image version
         id: last_version
         run: |
-          IMAGE_NAME=aasourav/watchcontainer
+          IMAGE_NAME=openappstech/watchcontainer
           LAST_TAG=$(curl -s "https://hub.docker.com/v2/repositories/$IMAGE_NAME/tags?page_size=100" \
             | jq -r '.results[].name' \
             | grep -E '^1\.[0-9]+$' \
@@ -56,11 +56,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          IMAGE_NAME=aasourav/watchcontainer
+          IMAGE_NAME=openappstech/watchcontainer
           docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ steps.last_version.outputs.new_tag }} . --no-cache
 
       - name: Push Docker Image
         run: |
-          IMAGE_NAME=aasourav/watchcontainer
+          IMAGE_NAME=openappstech/watchcontainer
           docker push $IMAGE_NAME:${{ steps.last_version.outputs.new_tag }}
           docker push $IMAGE_NAME:latest
